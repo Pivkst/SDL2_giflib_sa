@@ -57,8 +57,8 @@ CEV_GifAnim * CEV_gifAnimLoadRW(SDL_RWops* rwops, SDL_Renderer *renderer, char f
     CEV_gifReadWriteErr = 0;
 
         /*EXE*/
-
-    anim = malloc(sizeof(CEV_GifAnim));
+        
+    anim = (CEV_GifAnim*)malloc(sizeof(CEV_GifAnim));
 
     if (anim == NULL)
         goto err_exit;
@@ -97,7 +97,7 @@ CEV_GifAnim * CEV_gifAnimLoadRW(SDL_RWops* rwops, SDL_Renderer *renderer, char f
 
     for (i=0; i<anim->status.imgNum; i++)
     {
-        pixels = malloc(gif->image[i].descriptor.width * gif->image[i].descriptor.height * sizeof(uint32_t));
+        pixels = (Uint8*)malloc(gif->image[i].descriptor.width * gif->image[i].descriptor.height * sizeof(uint32_t));
 
         if(pixels != NULL)
         {

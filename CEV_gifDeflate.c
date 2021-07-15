@@ -173,7 +173,7 @@ int L_gifExtFillRW(L_GifFile *gif, SDL_RWops* file)
     {/*switch file extension type*/
 
         case 0xf9 : /*Graphics Control Extension*/
-            L_gifGceFillRW(&gif->gce, file);/*vérifié*/
+            L_gifGceFillRW(&gif->gce, file); /*checked*/
         break;
 
         /* TODO (cedric#1#): eventually to be taken into consideration but why ? */
@@ -204,7 +204,7 @@ L_GifFile *L_gifCreate()
 
     L_GifFile *newgif = NULL;
 
-    newgif = malloc(sizeof(*newgif));
+    newgif = (L_GifFile *)malloc(sizeof(*newgif));
 
     if(newgif == NULL)
     {
@@ -291,7 +291,7 @@ void L_gifImgNewRW(L_GifFile *gif, SDL_RWops* file)
     /*one more frame to come*/
     gif->imgNum ++;
 
-    temp = realloc(gif->image, gif->imgNum * sizeof(L_GifImage));
+    temp = (L_GifImage*)realloc(gif->image, gif->imgNum * sizeof(L_GifImage));
 
     if (temp != NULL)
         gif->image = temp;
@@ -366,7 +366,7 @@ void L_gifDataFillRW(L_GifFile *gif, SDL_RWops* file)
     while((subBlockSize = SDL_ReadU8(file))) /*a size of 0 means no data to follow*/
     {/*fill rawData with subBlocks datas*/
 
-        temp = realloc(rawData, rawDataSize + subBlockSize);/*alloc/realloc volume for new datas*/
+        temp = (uint8_t*)realloc(rawData, rawDataSize + subBlockSize);/*alloc/realloc volume for new datas*/
 
         if (temp != NULL)/*realloc is ok*/
             rawData = temp;
@@ -419,7 +419,7 @@ int L_gifComExtFillRW(L_GifComExt *ext, SDL_RWops* file)
     temp = SDL_ReadU8(file);
     temp+=1;
 
-    ext->text = malloc(temp * sizeof(char));
+    ext->text = (char*)malloc(temp * sizeof(char));
     if(ext->text == NULL)
     {
         fprintf(stderr, "err / L_gifComExtFillRW : %s\n", strerror(errno));
@@ -429,9 +429,6 @@ int L_gifComExtFillRW(L_GifComExt *ext, SDL_RWops* file)
     if(SDL_RWread(file, ext->text, 1, temp) != temp)
 
         CEV_gifReadWriteErr++;
-
-    /*debug supprimé ici*/
-    /*ext->text[temp-1]='\0';*/
 
     if(CEV_gifReadWriteErr)
         fprintf(stderr,"R/W error while filling Comment Extension.\n");
@@ -484,7 +481,7 @@ int L_gifColorTabFillRW(unsigned int numOfColor, L_GifColorTable *colors, SDL_RW
 
     int i;
 
-    colors->table = malloc(numOfColor*sizeof(L_GifColor));
+    colors->table = (L_GifColor*)malloc(numOfColor*sizeof(L_GifColor));
 
     if (colors->table == NULL)
     {
@@ -618,7 +615,7 @@ void L_gifLzw(void *codeStream, L_GifFile *gif, unsigned int lzwMinCode)
 
     /*** PRL ***/
 
-    indexStream = malloc(indexNum *sizeof(uint8_t));
+    indexStream = (uint8_t*)malloc(indexNum *sizeof(uint8_t));
 
     if(indexStream == NULL)
     {
@@ -708,7 +705,7 @@ uint16_t L_gifGetBitFieldValue16(void *data, unsigned int *bitStart, size_t mask
     uint32_t value  = 0,
              mask   = (1<<maskSize) - 1;
 
-    uint8_t* ptr    = data;
+    uint8_t* ptr    = (uint8_t*)data;
 
     if (maskSize > 16 || !data)
         return 0;

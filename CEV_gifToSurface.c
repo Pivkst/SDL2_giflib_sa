@@ -252,7 +252,7 @@ char L_gifBlit(CEV_GifAnim *anim)
 
 
 char L_gifAddModulo(int mode,int* val,int num)
-{/*incrément / décrément de val par modulo***VALIDE***/
+{/*increment / decrement of val by modulo ***VALID***/
 
     char result = 0;
 
@@ -287,7 +287,7 @@ char L_gifAddModulo(int mode,int* val,int num)
 
 
 char L_gifAddLim(int mode, int *val, int num)
-{/*incrément / décrément de val par limite***VALIDE***/
+{/*increment / decrement of val by limit ***VALID***/
     switch (mode)
     {
         case 0 :/*incremental*/
@@ -402,7 +402,7 @@ char L_gifAnimInit(CEV_GifAnim * anim, L_GifFile* gif)
     strcpy(anim->status.version, gif->header.version);
 
     /*allocating frames table*/
-    anim->pictures = malloc(anim->status.imgNum * sizeof(L_GifFrame));
+    anim->pictures = (L_GifFrame*)malloc(anim->status.imgNum * sizeof(L_GifFrame));
 
     if (!anim->pictures)
     {/*on error*/
