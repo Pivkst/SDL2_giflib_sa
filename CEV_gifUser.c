@@ -16,7 +16,6 @@
 
 
 
-
 CEV_GifAnim * CEV_gifAnimLoad(const char* fileName, SDL_Renderer *renderer)
 {/*direct gif animation load from gif file*/
 
@@ -295,26 +294,25 @@ char CEV_gifAnimAuto(CEV_GifAnim *anim)
 {/*updates animations**/
 
     char sts = 0;
-
-    unsigned int actTime,
-                 now = SDL_GetTicks();
-
-    int imgAct = anim->status.imgAct;
-
     if(!anim)
         return 0;
 
     /*if first call*/
+    unsigned int now = SDL_GetTicks();
     if(!anim->status.time)
         anim->status.time = now;
 
-    /*since last time ?*/
-    actTime = now - anim->status.time;
+    int activeImage = anim->status.imgAct;
 
-    if((actTime >= anim->pictures[imgAct].time) || anim->status.refresh)
+    //timing
+    unsigned int timeSinceUpdate = now - anim->status.time,
+                 imageDelay = anim->pictures[activeImage].time,
+                 error = timeSinceUpdate - imageDelay;
+
+    if((timeSinceUpdate >= imageDelay) || anim->status.refresh)
     {/*it's time or it's forced by else function*/
         sts = L_gifBlit(anim);
-        anim->status.time = now;
+        anim->status.time = now - error % imageDelay;
     }
 
     return sts;
