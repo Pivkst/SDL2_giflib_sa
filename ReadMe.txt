@@ -1,6 +1,8 @@
 ﻿Developped by Cédric Van Den Bussche 
 Release 1.0 on 27 feb 2016
 
+Modified by Jan Tomšič Pivk
+
 Online documentation available @ http://themealena.games.free.fr/html/SDL_GIFlib.php
 
 
